@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechTalk - Expert Tech Reviews</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#00B4D8',secondary:'#20E3B2'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+color: #333;
+}
+.nav-link {
+position: relative;
+}
+.nav-link::after {
+content: '';
+position: absolute;
+width: 0;
+height: 2px;
+bottom: -4px;
+left: 0;
+background-color: #00B4D8;
+transition: width 0.3s ease;
+}
+.nav-link:hover::after, .nav-link.active::after {
+width: 100%;
+}
+.category-item:hover .category-name {
+opacity: 1;
+transform: translateY(0);
+}
+.category-name {
+opacity: 0;
+transform: translateY(10px);
+transition: all 0.3s ease;
+}
+.review-card {
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.review-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 25px -5px rgba(0, 180, 216, 0.1), 0 10px 10px -5px rgba(0, 180, 216, 0.04);
+}
+.custom-rating {
+display: inline-flex;
+}
+.custom-rating .star {
+color: #ddd;
+margin-right: 2px;
+}
+.custom-rating .star.filled {
+color: #00B4D8;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.search-input:focus {
+outline: none;
+box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+.custom-checkbox {
+position: relative;
+display: inline-block;
+width: 20px;
+height: 20px;
+margin-right: 8px;
+}
+.custom-checkbox input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.checkmark {
+position: absolute;
+top: 0;
+left: 0;
+width: 20px;
+height: 20px;
+border: 2px solid #ddd;
+border-radius: 4px;
+transition: all 0.2s ease;
+}
+.custom-checkbox input:checked ~ .checkmark {
+background-color: #00B4D8;
+border-color: #00B4D8;
+}
+.checkmark:after {
+content: "";
+position: absolute;
+display: none;
+left: 6px;
+top: 2px;
+width: 5px;
+height: 10px;
+border: solid white;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+display: block;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 50px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+transition: .4s;
+border-radius: 34px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #00B4D8;
+}
+input:checked + .slider:before {
+transform: translateX(26px);
+}
+.hero-section {
+background-image: linear-gradient(to right, rgba(10, 25, 47, 0.9) 40%, rgba(10, 25, 47, 0.7) 60%, rgba(10, 25, 47, 0.5) 80%, rgba(10, 25, 47, 0.3) 100%), url('https://readdy.ai/api/search-image?query=Modern%20technology%20devices%20including%20smartphones%2C%20tablets%2C%20laptops%2C%20and%20cameras%20arranged%20in%20a%20clean%2C%20minimalist%20setting%20with%20soft%20lighting%20and%20a%20gradient%20blue%20background.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20devices%20displayed%20at%20different%20angles%20to%20showcase%20their%20sleek%20design%20features.%20The%20left%20side%20of%20the%20image%20has%20more%20empty%20space%20for%20text%20overlay.&width=1920&height=800&seq=hero1&orientation=landscape');
+background-size: cover;
+background-position: center;
+}
+</style>
+</head>
+<body class="bg-white">
+<!-- Header -->
+<header class="bg-[#0A192F] sticky top-0 z-50">
+<div class="container mx-auto px-4 py-3 flex items-center justify-between">
+<div class="flex items-center space-x-8">
+<a href="#" class="text-white text-2xl font-['Pacifico']">TechTalk</a>
+<div class="relative">
+<input type="text" placeholder="Search reviews, devices, or brands..." class="search-input bg-[#162A46] text-white rounded-full py-2 pl-10 pr-4 w-[400px] border-none focus:ring-2 focus:ring-primary text-sm">
+<div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a href="#" class="nav-link text-white hover:text-primary active">Home</a>
+<a href="#" class="nav-link text-white hover:text-primary">Reviews</a>
+<a href="#" class="nav-link text-white hover:text-primary">Comparisons</a>
+<a href="#" class="nav-link text-white hover:text-primary">Buying Guides</a>
+<a href="#" class="nav-link text-white hover:text-primary">News</a>
+<div class="relative ml-4" id="userMenuContainer">
+<div class="w-8 h-8 flex items-center justify-center bg-[#162A46] rounded-full text-white cursor-pointer" id="userMenuButton">
+<i class="ri-user-line"></i>
+</div>
+</div>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden" id="userDropdownMenu">
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-login-box-line mr-2"></i>Sign In
+</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-user-add-line mr-2"></i>Create Account
+</a>
+<div class="hidden logged-in-options">
+<div class="h-px bg-gray-200 my-2"></div>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-user-settings-line mr-2"></i>My Profile
+</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-draft-line mr-2"></i>My Reviews
+</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-bookmark-line mr-2"></i>Saved Devices
+</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-notification-line mr-2"></i>Notifications
+</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors duration-150">
+<i class="ri-settings-3-line mr-2"></i>Settings
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section h-[500px] flex items-center">
+<div class="container mx-auto px-4 w-full">
+<div class="max-w-2xl">
+<h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Expert Tech Reviews You Can Trust</h1>
+<p class="text-lg text-gray-200 mb-8">Discover in-depth analysis and honest opinions on the latest smartphones, tablets, cameras, and more.</p>
+<div class="flex flex-wrap gap-4">
+<a href="#" class="bg-primary hover:bg-opacity-90 text-white px-6 py-3 rounded-button font-medium transition duration-300 whitespace-nowrap">Latest Reviews</a>
+<a href="#" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-button font-medium hover:bg-white hover:bg-opacity-10 transition duration-300 whitespace-nowrap">Compare Devices</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Navigation -->
+<section class="py-8 bg-gray-50">
+<div class="container mx-auto px-4">
+<h2 class="text-2xl font-bold text-[#0A192F] mb-6">Browse by Category</h2>
+<div class="flex overflow-x-auto pb-4 space-x-6 no-scrollbar">
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-smartphone-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Smartphones</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-tablet-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Tablets</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-camera-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Cameras</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-headphone-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Audio</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-computer-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Laptops</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-watch-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Wearables</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-gamepad-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Gaming</span>
+</div>
+<div class="category-item flex flex-col items-center cursor-pointer">
+<div class="w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-md mb-2 hover:shadow-lg transition duration-300 hover:bg-primary hover:text-white">
+<i class="ri-home-wifi-line ri-lg"></i>
+</div>
+<span class="category-name text-sm font-medium text-[#0A192F]">Smart Home</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Reviews -->
+<section class="py-12">
+<div class="container mx-auto px-4">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-bold text-[#0A192F]">Featured Reviews</h2>
+<a href="#" class="text-primary hover:underline font-medium flex items-center">
+View all reviews
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Review Card 1 -->
+<div class="review-card bg-white rounded-lg overflow-hidden shadow-md">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=iPhone%2015%20Pro%20Max%20smartphone%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20phone%20is%20displayed%20at%20an%20angle%20to%20showcase%20its%20sleek%20titanium%20design%2C%20triple%20camera%20system%2C%20and%20dynamic%20island%20notch.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=600&height=400&seq=phone1&orientation=landscape" alt="iPhone 15 Pro Max" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Smartphone</span>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-half-fill"></i></span>
+<span class="ml-1 text-sm font-medium">4.5</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">iPhone 15 Pro Max Review</h3>
+<p class="text-gray-600 mb-4 line-clamp-3">Apple's flagship delivers exceptional camera performance and impressive battery life, but is it worth the premium price tag? We dive deep into what makes this device stand out from the competition.</p>
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+</div>
+</div>
+<!-- Review Card 2 -->
+<div class="review-card bg-white rounded-lg overflow-hidden shadow-md">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Samsung%20Galaxy%20S24%20Ultra%20smartphone%20displayed%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20phone%20is%20shown%20at%20an%20angle%20to%20highlight%20its%20sleek%20design%2C%20S%20Pen%2C%20and%20advanced%20camera%20system.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=600&height=400&seq=phone2&orientation=landscape" alt="Samsung Galaxy S24 Ultra" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Smartphone</span>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star"><i class="ri-star-line"></i></span>
+<span class="ml-1 text-sm font-medium">4.0</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">Samsung Galaxy S24 Ultra Review</h3>
+<p class="text-gray-600 mb-4 line-clamp-3">Samsung's latest flagship brings AI-powered features and a refined design. With its powerful Snapdragon processor and versatile camera system, it aims to be the ultimate Android experience.</p>
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+</div>
+</div>
+<!-- Review Card 3 -->
+<div class="review-card bg-white rounded-lg overflow-hidden shadow-md">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Sony%20Alpha%20A7%20IV%20mirrorless%20camera%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20camera%20is%20displayed%20at%20an%20angle%20to%20showcase%20its%20professional%20design%2C%20lens%2C%20and%20controls.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=600&height=400&seq=camera1&orientation=landscape" alt="Sony Alpha A7 IV" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Camera</span>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="ml-1 text-sm font-medium">5.0</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">Sony Alpha A7 IV Review</h3>
+<p class="text-gray-600 mb-4 line-clamp-3">Sony's latest full-frame mirrorless camera raises the bar with its 33MP sensor, improved autofocus, and 4K 60p video capabilities. Is this the perfect hybrid camera for both photographers and videographers?</p>
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Comparison Section -->
+<section class="py-12 bg-gray-50">
+<div class="container mx-auto px-4">
+<h2 class="text-2xl font-bold text-[#0A192F] mb-8">Compare Devices</h2>
+<div class="bg-white rounded-lg shadow-md p-6 mb-8">
+<div class="flex flex-col md:flex-row gap-6 mb-6">
+<div class="flex-1">
+<label class="block text-sm font-medium text-gray-700 mb-2">Device 1</label>
+<div class="relative">
+<button class="w-full bg-white border border-gray-300 rounded-button px-4 py-2 text-left flex justify-between items-center">
+<span>iPhone 15 Pro Max</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+</div>
+</div>
+<div class="flex-1">
+<label class="block text-sm font-medium text-gray-700 mb-2">Device 2</label>
+<div class="relative">
+<button class="w-full bg-white border border-gray-300 rounded-button px-4 py-2 text-left flex justify-between items-center">
+<span>Samsung Galaxy S24 Ultra</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead>
+<tr class="bg-gray-50">
+<th class="text-left py-3 px-4 font-medium text-gray-700">Specification</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">iPhone 15 Pro Max</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">Samsung Galaxy S24 Ultra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-t border-gray-200">
+<td class="py-3 px-4 font-medium text-gray-700">Display</td>
+<td class="py-3 px-4 text-gray-600">6.7" Super Retina XDR OLED, 120Hz</td>
+<td class="py-3 px-4 text-gray-600">6.8" Dynamic AMOLED 2X, 120Hz</td>
+</tr>
+<tr class="border-t border-gray-200 bg-gray-50">
+<td class="py-3 px-4 font-medium text-gray-700">Processor</td>
+<td class="py-3 px-4 text-gray-600">A17 Pro</td>
+<td class="py-3 px-4 text-gray-600">Snapdragon 8 Gen 3</td>
+</tr>
+<tr class="border-t border-gray-200">
+<td class="py-3 px-4 font-medium text-gray-700">RAM</td>
+<td class="py-3 px-4 text-gray-600">8GB</td>
+<td class="py-3 px-4 text-gray-600">12GB</td>
+</tr>
+<tr class="border-t border-gray-200 bg-gray-50">
+<td class="py-3 px-4 font-medium text-gray-700">Storage</td>
+<td class="py-3 px-4 text-gray-600">256GB / 512GB / 1TB</td>
+<td class="py-3 px-4 text-gray-600">256GB / 512GB / 1TB</td>
+</tr>
+<tr class="border-t border-gray-200">
+<td class="py-3 px-4 font-medium text-gray-700">Main Camera</td>
+<td class="py-3 px-4 text-gray-600">48MP (f/1.8) + 12MP Ultra Wide + 12MP Telephoto</td>
+<td class="py-3 px-4 text-gray-600">200MP (f/1.7) + 12MP Ultra Wide + 10MP Telephoto + 50MP Periscope</td>
+</tr>
+<tr class="border-t border-gray-200 bg-gray-50">
+<td class="py-3 px-4 font-medium text-gray-700">Battery</td>
+<td class="py-3 px-4 text-gray-600">4,422 mAh</td>
+<td class="py-3 px-4 text-gray-600">5,000 mAh</td>
+</tr>
+<tr class="border-t border-gray-200">
+<td class="py-3 px-4 font-medium text-gray-700">Operating System</td>
+<td class="py-3 px-4 text-gray-600">iOS 17</td>
+<td class="py-3 px-4 text-gray-600">Android 14 with One UI 6.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-8">
+<h3 class="text-lg font-bold text-[#0A192F] mb-4">Performance Comparison</h3>
+<div id="performanceChart" class="h-80"></div>
+</div>
+</div>
+<div class="text-center">
+<a href="#" class="inline-block bg-primary hover:bg-opacity-90 text-white px-6 py-3 rounded-button font-medium transition duration-300 whitespace-nowrap">Compare More Devices</a>
+</div>
+</div>
+</section>
+<!-- Latest Reviews -->
+<section class="py-12">
+<div class="container mx-auto px-4">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-bold text-[#0A192F]">Latest Reviews</h2>
+<div class="flex items-center space-x-4">
+<span class="text-sm text-gray-600">Filter by:</span>
+<div class="relative">
+<button class="bg-white border border-gray-300 rounded-button px-4 py-2 text-sm flex items-center whitespace-nowrap">
+<span>All Categories</span>
+<i class="ri-arrow-down-s-line ml-2"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<!-- Review Item 1 -->
+<div class="bg-white rounded-lg shadow-md p-4 md:p-6">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="md:w-1/4 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=iPad%20Pro%20M3%20tablet%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20tablet%20is%20displayed%20at%20an%20angle%20to%20showcase%20its%20sleek%20design%2C%20large%20display%2C%20and%20Apple%20Pencil.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=400&height=300&seq=tablet1&orientation=landscape" alt="iPad Pro M3" class="w-full h-48 object-cover object-top rounded-lg">
+</div>
+<div class="md:w-3/4">
+<div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+<div>
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Tablet</span>
+<span class="text-xs text-gray-500 ml-2">June 9, 2025</span>
+</div>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star"><i class="ri-star-line"></i></span>
+<span class="ml-1 text-sm font-medium">4.0</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">iPad Pro M3 Review: The Ultimate Creative Tool</h3>
+<p class="text-gray-600 mb-4">Apple's latest iPad Pro with the M3 chip pushes the boundaries of what a tablet can do. With its stunning mini-LED display and desktop-class performance, it's a powerhouse for creative professionals. However, the high price and iPadOS limitations might make some users think twice.</p>
+<div class="flex flex-wrap items-center justify-between gap-4">
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+<div class="flex items-center space-x-4 text-gray-500">
+<span class="flex items-center text-sm">
+<i class="ri-eye-line mr-1"></i> 2,456
+</span>
+<span class="flex items-center text-sm">
+<i class="ri-chat-1-line mr-1"></i> 48
+</span>
+<button class="flex items-center text-sm hover:text-primary">
+<i class="ri-share-line mr-1"></i> Share
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Item 2 -->
+<div class="bg-white rounded-lg shadow-md p-4 md:p-6">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="md:w-1/4 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Sony%20WH-1000XM5%20headphones%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20headphones%20are%20displayed%20at%20an%20angle%20to%20showcase%20their%20sleek%20design%2C%20ear%20cups%2C%20and%20headband.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=400&height=300&seq=headphones1&orientation=landscape" alt="Sony WH-1000XM5" class="w-full h-48 object-cover object-top rounded-lg">
+</div>
+<div class="md:w-3/4">
+<div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+<div>
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Audio</span>
+<span class="text-xs text-gray-500 ml-2">June 7, 2025</span>
+</div>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="ml-1 text-sm font-medium">4.9</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">Sony WH-1000XM5 Review: Noise Cancellation Perfected</h3>
+<p class="text-gray-600 mb-4">Sony's flagship headphones continue to set the standard for active noise cancellation. With improved comfort, refined sound quality, and impressive battery life, the WH-1000XM5 delivers an exceptional listening experience. The new design might be polarizing for some, but the performance is undeniable.</p>
+<div class="flex flex-wrap items-center justify-between gap-4">
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+<div class="flex items-center space-x-4 text-gray-500">
+<span class="flex items-center text-sm">
+<i class="ri-eye-line mr-1"></i> 1,892
+</span>
+<span class="flex items-center text-sm">
+<i class="ri-chat-1-line mr-1"></i> 36
+</span>
+<button class="flex items-center text-sm hover:text-primary">
+<i class="ri-share-line mr-1"></i> Share
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Item 3 -->
+<div class="bg-white rounded-lg shadow-md p-4 md:p-6">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="md:w-1/4 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Dell%20XPS%2016%20laptop%20on%20a%20clean%20minimalist%20background%20with%20soft%20lighting.%20The%20laptop%20is%20displayed%20at%20an%20angle%20to%20showcase%20its%20sleek%20design%2C%20thin%20bezels%2C%20and%20keyboard.%20The%20image%20has%20a%20professional%2C%20high-tech%20aesthetic%20with%20subtle%20blue%20tones%20that%20complement%20the%20device.&width=400&height=300&seq=laptop1&orientation=landscape" alt="Dell XPS 16" class="w-full h-48 object-cover object-top rounded-lg">
+</div>
+<div class="md:w-3/4">
+<div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+<div>
+<span class="bg-[#E6F7FB] text-primary text-xs font-medium px-2 py-1 rounded">Laptop</span>
+<span class="text-xs text-gray-500 ml-2">June 5, 2025</span>
+</div>
+<div class="custom-rating">
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star filled"><i class="ri-star-fill"></i></span>
+<span class="star"><i class="ri-star-half-fill"></i></span>
+<span class="ml-1 text-sm font-medium">4.5</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-[#0A192F] mb-2">Dell XPS 16 Review: The Ultimate Windows Laptop</h3>
+<p class="text-gray-600 mb-4">Dell's redesigned XPS 16 combines stunning aesthetics with powerful performance. Featuring Intel's latest processors and NVIDIA RTX graphics, it handles everything from content creation to gaming with ease. The OLED display is simply breathtaking, though the premium experience comes with a premium price tag.</p>
+<div class="flex flex-wrap items-center justify-between gap-4">
+<a href="#" class="text-primary font-medium hover:underline flex items-center">
+Read full review
+<i class="ri-arrow-right-line ml-1"></i>
+</a>
+<div class="flex items-center space-x-4 text-gray-500">
+<span class="flex items-center text-sm">
+<i class="ri-eye-line mr-1"></i> 2,103
+</span>
+<span class="flex items-center text-sm">
+<i class="ri-chat-1-line mr-1"></i> 42
+</span>
+<button class="flex items-center text-sm hover:text-primary">
+<i class="ri-share-line mr-1"></i> Share
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 text-center">
+<button class="bg-white border border-primary text-primary hover:bg-primary hover:text-white px-6 py-3 rounded-button font-medium transition duration-300 whitespace-nowrap">Load More Reviews</button>
+</div>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="py-16 bg-[#0A192F]">
+<div class="container mx-auto px-4">
+<div class="max-w-2xl mx-auto text-center">
+<h2 class="text-3xl font-bold text-white mb-4">Stay Updated with TechTalk</h2>
+<p class="text-gray-300 mb-8">Subscribe to our newsletter for the latest tech reviews, comparisons, and buying guides delivered straight to your inbox.</p>
+<div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+<div class="relative flex-1">
+<input type="email" placeholder="Your email address" class="w-full bg-[#162A46] text-white rounded-button py-3 px-4 border-none focus:ring-2 focus:ring-primary">
+</div>
+<button class="bg-secondary hover:bg-opacity-90 text-[#0A192F] font-medium px-6 py-3 rounded-button transition duration-300 whitespace-nowrap">Subscribe</button>
+</div>
+<div class="mt-4 flex items-center justify-center">
+<label class="custom-checkbox">
+<input type="checkbox">
+<span class="checkmark"></span>
+</label>
+<span class="text-sm text-gray-300">I agree to receive marketing emails from TechTalk</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0A192F] pt-12 pb-6 border-t border-[#162A46]">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+<div>
+<a href="#" class="text-white text-2xl font-['Pacifico'] mb-4 inline-block">TechTalk</a>
+<p class="text-gray-400 mb-6">Your trusted source for in-depth tech reviews and comparisons to help you make informed buying decisions.</p>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#162A46] text-white hover:bg-primary transition duration-300">
+<i class="ri-twitter-x-line"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#162A46] text-white hover:bg-primary transition duration-300">
+<i class="ri-facebook-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#162A46] text-white hover:bg-primary transition duration-300">
+<i class="ri-instagram-line"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#162A46] text-white hover:bg-primary transition duration-300">
+<i class="ri-youtube-line"></i>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Categories</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Smartphones</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Tablets</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Laptops</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Cameras</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Audio</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Wearables</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Quick Links</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">About Us</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Contact</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Review Policy</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Privacy Policy</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Terms of Service</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition duration-300">Advertise</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Contact Us</h3>
+<ul class="space-y-2">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-1">
+<i class="ri-map-pin-line"></i>
+</div>
+<span class="ml-2 text-gray-400">123 Tech Street, San Francisco, CA 94107</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-primary">
+<i class="ri-mail-line"></i>
+</div>
+<span class="ml-2 text-gray-400">contact@techtalk.com</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-primary">
+<i class="ri-phone-line"></i>
+</div>
+<span class="ml-2 text-gray-400">+1 (555) 123-4567</span>
+</li>
+</ul>
+<div class="mt-6">
+<h4 class="text-white font-medium mb-2">Dark Mode</h4>
+<label class="custom-switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-[#162A46] flex flex-col md:flex-row justify-between items-center">
+<p class="text-gray-400 text-sm mb-4 md:mb-0">© 2025 TechTalk. All rights reserved.</p>
+<div class="flex items-center space-x-4">
+<div class="flex items-center">
+<i class="ri-visa-line text-2xl text-gray-400"></i>
+</div>
+<div class="flex items-center">
+<i class="ri-mastercard-line text-2xl text-gray-400"></i>
+</div>
+<div class="flex items-center">
+<i class="ri-paypal-line text-2xl text-gray-400"></i>
+</div>
+<div class="flex items-center">
+<i class="ri-apple-fill text-2xl text-gray-400"></i>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script id="performanceChartScript">
+document.addEventListener('DOMContentLoaded', function() {
+const chartDom = document.getElementById('performanceChart');
+if (!chartDom) return;
+const myChart = echarts.init(chartDom);
+const option = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+textStyle: {
+color: '#1f2937'
+}
+},
+legend: {
+data: ['iPhone 15 Pro Max', 'Samsung Galaxy S24 Ultra'],
+textStyle: {
+color: '#1f2937'
+}
+},
+radar: {
+indicator: [
+{ name: 'CPU Performance', max: 100 },
+{ name: 'GPU Performance', max: 100 },
+{ name: 'Battery Life', max: 100 },
+{ name: 'Display Quality', max: 100 },
+{ name: 'Camera Quality', max: 100 },
+{ name: 'Build Quality', max: 100 }
+],
+splitArea: {
+areaStyle: {
+color: ['rgba(255, 255, 255, 0.03)', 'rgba(255, 255, 255, 0.05)']
+}
+},
+axisLine: {
+lineStyle: {
+color: 'rgba(211, 211, 211, 0.5)'
+}
+},
+splitLine: {
+lineStyle: {
+color: 'rgba(211, 211, 211, 0.5)'
+}
+}
+},
+series: [
+{
+name: 'Device Comparison',
+type: 'radar',
+emphasis: {
+lineStyle: {
+width: 4
+}
+},
+data: [
+{
+value: [95, 90, 85, 92, 94, 93],
+name: 'iPhone 15 Pro Max',
+symbolSize: 6,
+lineStyle: {
+width: 2,
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: 'rgba(87, 181, 231, 0.1)'
+},
+itemStyle: {
+color: 'rgba(87, 181, 231, 1)'
+}
+},
+{
+value: [92, 93, 90, 95, 96, 90],
+name: 'Samsung Galaxy S24 Ultra',
+symbolSize: 6,
+lineStyle: {
+width: 2,
+color: 'rgba(141, 211, 199, 1)'
+},
+areaStyle: {
+color: 'rgba(141, 211, 199, 0.1)'
+},
+itemStyle: {
+color: 'rgba(141, 211, 199, 1)'
+}
+}
+]
+}
+]
+};
+myChart.setOption(option);
+window.addEventListener('resize', function() {
+myChart.resize();
+});
+});
+</script>
+<script id="navigationScript">
+document.addEventListener('DOMContentLoaded', function() {
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+navLinks.forEach(item => item.classList.remove('active'));
+this.classList.add('active');
+});
+});
+});
+</script>
+<script id="userMenuScript">
+document.addEventListener('DOMContentLoaded', function() {
+const userMenuButton = document.getElementById('userMenuButton');
+const userDropdownMenu = document.getElementById('userDropdownMenu');
+function toggleDropdown() {
+userDropdownMenu.classList.toggle('hidden');
+}
+function closeDropdown(event) {
+const userMenuContainer = document.getElementById('userMenuContainer');
+if (!userMenuContainer.contains(event.target)) {
+userDropdownMenu.classList.add('hidden');
+}
+}
+userMenuButton.addEventListener('click', toggleDropdown);
+document.addEventListener('click', closeDropdown);
+});
+</script>
+<script id="customFormElementsScript">
+document.addEventListener('DOMContentLoaded', function() {
+// Custom checkbox functionality
+const checkboxes = document.querySelectorAll('.custom-checkbox input');
+checkboxes.forEach(checkbox => {
+checkbox.addEventListener('change', function() {
+// Additional functionality can be added here if needed
+});
+});
+// Custom switch functionality
+const switches = document.querySelectorAll('.custom-switch input');
+switches.forEach(switchEl => {
+switchEl.addEventListener('change', function() {
+// Dark mode toggle or other functionality can be added here
+if (this.checked) {
+// Enable dark mode
+console.log('Dark mode enabled');
+} else {
+// Disable dark mode
+console.log('Dark mode disabled');
+}
+});
+});
+});
+</script>
+</body>
+</html>
